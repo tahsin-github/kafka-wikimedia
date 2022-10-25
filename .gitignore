@@ -1,1 +1,2 @@
 kafka-producer/src/main/resources/properties/KafkaServer.properties
+src/main/java/properties/KafkaServer.properties
