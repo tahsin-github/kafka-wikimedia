@@ -1,5 +1,6 @@
 package WikimediaOpenSearch;
 
+import com.google.gson.JsonParser;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -110,20 +111,25 @@ public class OpenSearchConsumer {
 
                 for (ConsumerRecord<String, String> record : records){
                     try{
+
+                        String id = extractId(record.value());
+
                         // send the data to the opensearch
                         IndexRequest indexRequest = new IndexRequest("wikimedia")
-                                .source(record.value(), XContentType.JSON);
+                                .source(record.value(), XContentType.JSON)
+                                .id(id);
 
                         IndexResponse response = openSearchClient.index(indexRequest, RequestOptions.DEFAULT);
 
-                        log.info("Document inserted : 1 " + response.getId());
+//                        log.info("Document inserted : 1 " + response.getId());
                     }
                     catch (Exception e){
                         e.printStackTrace();
                     }
-
-
                 }
+
+                consumer.commitSync();
+                log.info("Offset has been committed");
             }
 
         }
@@ -150,11 +156,21 @@ public class OpenSearchConsumer {
         properties.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, groupId);
         properties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
+        properties.setProperty(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
 
 
         // Create the Consumer
         return new KafkaConsumer<String, String>(properties);
 
 
+    }
+
+    private static String extractId(String json){
+        return JsonParser.parseString(json)
+                .getAsJsonObject()
+                .get("meta")
+                .getAsJsonObject()
+                .get("id")
+                .getAsString();
     }
 }
