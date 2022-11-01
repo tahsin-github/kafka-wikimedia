@@ -46,6 +46,6 @@ public class WikimediaChangesProducer {
         // Start the producer in another thread
         eventSource.start();
 
-        TimeUnit.MINUTES.sleep(1);
+        TimeUnit.MINUTES.sleep(1000);
     }
 }

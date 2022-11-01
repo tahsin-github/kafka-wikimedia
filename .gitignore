@@ -1,2 +1,7 @@
+<<<<<<< HEAD
 kafka-consumer-opensearch/src/main/java/properties
 kafka-consumer-opensearch/target
+=======
+kafka-producer/target
+kafka-producer/src/main/java/properties
+>>>>>>> d3cb368c1f99698a464cb1f0ae626e0772089392
