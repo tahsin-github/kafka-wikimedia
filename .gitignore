@@ -1,4 +1,2 @@
-kafka-producer/src/main/resources/properties/KafkaServer.properties
-src/main/java/properties/KafkaServer.properties
-src/main/java/properties/
-kafka-consumer-opensearch/src/main/java/properties/servers.properties
+kafka-consumer-opensearch/src/main/java/properties
+kafka-consumer-opensearch/target
